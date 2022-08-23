@@ -10,18 +10,19 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.zone.ZoneRulesException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.List; 
 
 
 /**
- * Java 8 lambdas, 
+ * Java 8 lambdas (done), 
  * stream functions {
- * 		filter
- * 		map
+ * 		filter (done)
+ * 		map (done)
  * 		findFirst (done)
- * 		count
+ * 		count (done)
  * }
  * Date/Time (done)
  * current time in different time zones (done)
@@ -71,15 +72,19 @@ public class App
 	    		System.out.println("\nEither the Country or City names are invalid options.");
 	    		validZone = false;
 	    	}
+    		
+    		if (validZone) { idNumber++; }
+    		
     		while (!validInput) {
 	    		userInput = new BufferedReader( new InputStreamReader(System.in));
 	    		System.out.println("\nEnter another TimeZone? (Y/N):");
 	    		response = userInput.readLine();
     		
-	    		if (response.equals("Y") || response.equals("y")) {validZone = false; validInput = true;}
-	    		else if (response.equals("N") || response.equals("n")) {validZone = true; validInput = true;}
+	    		if (response.equals("Y") || response.equals("y")) { validZone = false; validInput = true; }
+	    		else if (response.equals("N") || response.equals("n")) { validZone = true; validInput = true; }
     		}
-    		idNumber++;
+    		
+    		
     		
     	}
     	System.out.println(
@@ -87,6 +92,22 @@ public class App
     	.findFirst()
         .toString()
         );
+    	
+    	List<String> allTimeZones = timeStamps.stream()
+                .map( e -> e.getTimeZone() )
+                .distinct()
+                .collect(Collectors.toList());
+    	
+    	System.out.println(allTimeZones + " There are " + timeStamps.stream().count() + " timezones entered.");
+    	
+    	List<Integer> evenNumbers = timeStamps.stream()
+                .filter(n -> n.getIdNumber() % 2 == 0)
+                .map(n -> n.getIdNumber())
+                .collect(Collectors.toList());
+    	
+    	System.out.println(evenNumbers + " all the even numbered ids from the list of time stamps");
+    	
+
     	
     	System.out.println(formatter.format(getZonedTime(timeZone)));
     	
